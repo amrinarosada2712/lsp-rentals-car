@@ -1,15 +1,15 @@
 <?php
-    // Mengambil nilai 'id' dari URL, jika tidak ada, default ke 0
-    $id = $_GET['id'] ?? 0;
+    // Mengambil nilai 'indexarray' dari URL
+    $id = $_GET['indexarray'];
 
-    // Daftar mobil beserta harga sewanya per hari (dalam Rupiah)
+    // Daftar mobil beserta harga sewanya per hari
     $rentals = [
-        ["Fortuner", 1000000], 
-        ["Creta", 900000], 
-        ["CRV", 700000]
+        ["Fortuner", 1000000, "fortuner.jpg"],
+        ["Creta", 900000, "creta.jpg"],
+        ["CRV", 700000, "crv.jpg"]
     ];
 
-    // Menentukan mobil yang dipilih berdasarkan input form atau default dari daftar berdasarkan ID
+    // Menentukan mobil yang dipilih berdasarkan input form atau default dari daftar berdasarkan indexarray
     $pilih_mobil = $_POST['car'] ?? $rentals[$id][0];
 
     // Mendapatkan harga mobil yang dipilih menggunakan array_column untuk memetakan nama ke harga
@@ -30,12 +30,17 @@
     // Mengecek apakah form telah dikirim (dengan metode POST)
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Validasi: Durasi harus angka dan lebih dari 0
-        if (!is_numeric($durasi) || $durasi <= 0) {
-            $errors[] = "Durasi harus berupa angka dan lebih dari 0.";
+        if (!is_numeric($durasi)) {
+            $errors[] = "Durasi harus berupa angka";
+        }
+
+        if (!is_numeric($_POST['identitas'])) {
+            $errors[] = "Identitas harus berupa angka";
         }
         
         // Validasi: Nomor identitas harus 16 digit angka
-        if (!preg_match('/^\d{16}$/', $_POST['identitas'] ?? '')) {
+        // strlen untuk menghitung jumlah karakter yang diinputkan pada input dengan name identitas
+        if (strlen($_POST['identitas']) !== 16) {
             $errors[] = "Nomor Identitas harus 16 digit angka.";
         }
 
@@ -72,15 +77,15 @@
             </div>
             <div class="card-body">
                 <!-- Menampilkan error jika ada -->
-                <?php if ($errors) : ?>
+                <?php if ($errors) { ?>
                     <div class="alert alert-danger">
                         <ul>
-                            <?php foreach ($errors as $error) : ?>
+                            <?php foreach ($errors as $error) { ?>
                                 <li><?= $error ?></li>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </ul>
                     </div>
-                <?php endif; ?>
+                <?php } ?>
 
                 <!-- Form Pemesanan -->
                 <form method="POST">
@@ -99,11 +104,11 @@
                     
                     <!-- Dropdown Pilihan Mobil -->
                     <select class="form-select mb-3" name="car" onchange="this.form.submit()">
-                        <?php foreach ($rentals as $car) : ?>
-                            <option value="<?= $car[0] ?>" <?= ($car[0] === $pilih_mobil) ? 'selected' : '' ?>>
-                                <?= $car[0] ?>
+                        <?php foreach  ($rentals as $indexarray => $nilai) { ?>
+                            <option value="<?= $nilai[0] ?>" <?= ($nilai[0] === $pilih_mobil) ? 'selected' : '' ?>>
+                                <?= $nilai[0] ?>
                             </option>
-                        <?php endforeach; ?>
+                        <?php }?>
                     </select>
                    
                     <!-- Input Harga Mobil (Readonly) -->

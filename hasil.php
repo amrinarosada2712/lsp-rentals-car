@@ -2,12 +2,12 @@
 // Periksa apakah form telah dikirim melalui metode POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Mengambil data dari form
-    $nama = htmlspecialchars($_POST['nama'] ?? 'Tidak diisi');
-    $identitas = htmlspecialchars($_POST['identitas'] ?? 'Tidak diisi');
-    $gender = htmlspecialchars($_POST['gender'] ?? 'Tidak diisi');
-    $car = htmlspecialchars($_POST['car'] ?? 'Tidak diisi');
-    $durasi = $_POST['durasi'] ?? 1;
-    $harga = str_replace('.', '', $_POST['harga'] ?? 0); // Menghapus format angka sebelum dikalkulasi
+    $nama = $_POST['nama'];
+    $identitas = $_POST['identitas'] ;
+    $gender = $_POST['gender'] ;
+    $car = $_POST['car'] ;
+    $durasi = $_POST['durasi'];
+    $harga = str_replace('.', '', $_POST['harga']); // Menghapus format angka sebelum dikalkulasi
     $supir = isset($_POST['supir']);
 
     // Konversi nilai durasi dan harga ke tipe numerik untuk perhitungan
